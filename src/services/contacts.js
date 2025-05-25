@@ -4,11 +4,11 @@ export async function getContacts({ page, perPage, sortBy, sortOrder, filter }) 
     const skip = page > 0 ? (page - 1) * perPage : 0;
 
     const contactQuery = Contact.find();
-    if (filter.contactType !== 'undefined') {
+    if (filter.contactType ) {
     contactQuery.where('contactType').equals(filter.contactType);
   }
 
-  if (filter.isFavourite !== 'undefined' ) {
+  if (filter.isFavourite ) {
     contactQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
@@ -18,7 +18,7 @@ export async function getContacts({ page, perPage, sortBy, sortOrder, filter }) 
         data: contacts,
         page,
         perPage,
-        totalItems: total,
+        total,
         totalPages,
         hasNextPage: totalPages > page,
         hasPreviousPage: page>1
