@@ -5,11 +5,13 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import {parseFilterParams} from '../utils/parseFilterParams.js'
 
 async function getContactsController(req, res) {
+// console.log(req.user)
+
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
     const filter = parseFilterParams(req.query);
     
-        const contacts = await getContacts({ page, perPage, sortBy, sortOrder, filter });
+        const contacts = await getContacts({ page, perPage, sortBy, sortOrder, filter, userId: req.user.id });
       res.json({
         status: 200,
         message: 'Successfully found contacts!',
@@ -30,7 +32,11 @@ async function getContactByIdController (req, res)  {
             throw new createHttpError.NotFound("Contact not found");
             
 
-        }
+    };
+
+    if (contact.userId.toString() !== req.user.id.toString()) {
+        throw new createHttpError.NotFound("Contact not found")
+    }
         res.json({
             status: 200,
             message: `Successfully found contact with id ${contactId}!`,
@@ -49,7 +55,7 @@ async function deleteContactController(req, res) {
     res.status(204).end()
 };
 async function createContactController(req, res) {
-    const contact = await createContact(req.body);
+    const contact = await createContact({...req.body, userId: req.user.id});
     res.status(201).json({status: 201, message: "Successfully created a contact!", data: contact})
 };
 async function updateContactController(req, res) {

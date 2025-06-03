@@ -1,9 +1,10 @@
 import { Contact } from "../models/contact.js";
 
-export async function getContacts({ page, perPage, sortBy, sortOrder, filter }) {
+export async function getContacts({ page, perPage, sortBy, sortOrder, filter, userId }) {
     const skip = page > 0 ? (page - 1) * perPage : 0;
 
     const contactQuery = Contact.find();
+    contactQuery.where('userId').equals(userId)
     if (filter.contactType ) {
     contactQuery.where('contactType').equals(filter.contactType);
   }
