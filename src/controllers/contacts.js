@@ -25,7 +25,7 @@ async function getContactByIdController (req, res)  {
         // в рек.парамс.контактИд передаємо конкактИд з посилання гетзапиту, а не просто Ид
         const contactId = req.params.contactId;
         
-        const contact = await getContactById(contactId, req.user.id);
+        const contact = await getContactById({contactId, userId:req.user.id});
 
         if (contact === null) {
             // return res.status(404).send({ status: 404, message: 'Contact not found' });
@@ -47,7 +47,7 @@ async function getContactByIdController (req, res)  {
 
 async function deleteContactController(req, res) {
     const contactId = req.params.contactId;
-    const result = await deleteContact(contactId, req.user.id);
+    const result = await deleteContact({contactId, userId:req.user.id});
     if (result === null) {
          throw new createHttpError.NotFound("Contact not found");
     }
@@ -60,7 +60,7 @@ async function createContactController(req, res) {
 };
 async function updateContactController(req, res) {
     const contactId = req.params.contactId;
-    const result = await updateContact(contactId, req.user.id, req.body);
+    const result = await updateContact({contactId, userId:req.user.id, ...req.body});
     if (result === null) {
         throw new createHttpError.NotFound("Contact not found");
     };
