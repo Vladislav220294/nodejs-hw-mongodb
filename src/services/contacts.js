@@ -29,12 +29,12 @@ export async function getContacts({ page, perPage, sortBy, sortOrder, filter, us
     
 };
 export async function getContactById(contactId, userId) {
-    return await Contact.findById({ _id: contactId, userId });
+    return await Contact.findOne({ _id: contactId, userId });
     
 };
 
 export async function deleteContact(contactId, userId) {
-    return await Contact.findByIdAndDelete({ _id: contactId, userId });
+    return await Contact.findOneAndDelete({ _id: contactId, userId });
     
 };
 
@@ -42,7 +42,10 @@ export async function createContact(payload) {
     return await Contact.create(payload);
 };
 
-export async function updateContact(contactId, userId, payload) {
-    return await Contact.findByIdAndUpdate({_id: contactId, userId, payload});
+export async function updateContact(contactId, payload, options = {}) {
+    const { userId } = options;
+    return await Contact.findOneAndUpdate({_id: contactId,  userId }, payload, {
+      new: true
+    });
     
 };
