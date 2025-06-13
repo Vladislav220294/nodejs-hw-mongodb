@@ -1,0 +1,71 @@
+tags:
+  - Contacts
+summary: Update contact
+operationId: updateContact
+description: Update contact
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 681f85e189cbd75c76898bbc
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Contact name
+            example: Jon Jones
+          phoneNumber:
+            type: string
+            description: Contact phone Number
+            example: 3806655441
+          contactType:
+            type: string
+            description: Type of contact
+            enum: ['work', 'home', 'personal']
+            example: home
+          email:
+            type: string
+            description: Contact email
+            example: lon@gmail.comming
+          isFavourite:
+            type: boolean
+            description: Favourite or not
+            example: true
+            default: false
+          photo:
+            type: string
+            format: binary
+            description: Contact photo url
+            example: 'https://res.cloudinary.com/dd5eglpta/image/upload/v1749471806/n9wrevoduyrgvrvu2zxa.png'
+responses:
+  '200':
+    description: Updated contact
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully patched a contact!
+            data:
+              $ref: ../../../components/schemas/contact.yaml
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '500':
+    $ref: ../../../components/responses/500.yaml
